@@ -4,7 +4,7 @@ description: Create a UI in a SAP Cloud Platform Subaccount's Web IDE and deploy
 auto_validation: true
 primary_tag: topic>abap-development
 tags: [  tutorial>beginner, topic>abap-development, topic>abap-extensibility ]
-time: 50
+time: 40
 author_name: Ulrike Liebherr
 author_profile: https://github.com/Liebherr
 ---
