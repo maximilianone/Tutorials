@@ -4,7 +4,7 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 orbs:
-  tutorials-check: maximilianone/tutorials-check@1.0.0 #imports the s3 orb in the circleci namespace
+  tutorials-check: maximilianone/tutorials-check@2.0.0 #imports the s3 orb in the circleci namespace
   # x.y.z should be replaced with the orb version you wish to use
 
 workflows:
