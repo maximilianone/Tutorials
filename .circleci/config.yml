@@ -71,7 +71,7 @@ notify:
     - url: https://webhooks.gitter.im/e/15f197634234d80a32fa
 workflows:
   version: 2
-  commitly:
+  build:
     jobs:
       - build-last-commit:
           filters:
