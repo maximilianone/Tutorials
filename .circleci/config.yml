@@ -1,12 +1,10 @@
-version: 2
 orbs:
-   tutorials-check: maximilianone/tutorials-check@2.0.1
+  tutorials-check: maximilianone/tutorials-check@2.0.1
+version: 2.1
 notify:
   webhooks:
-    # gitter hook
     - url: https://webhooks.gitter.im/e/15f197634234d80a32fa
 workflows:
-  version: 2
   build:
     jobs:
       - tutorials-check/build-last-commit
