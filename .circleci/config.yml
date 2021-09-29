@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: Fetch Tests
-          command: prepare.sh
+          command: ./prepare.sh
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
