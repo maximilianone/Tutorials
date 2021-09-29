@@ -18,7 +18,7 @@ tags: [ tutorial>intermediate, topic>abap-development  ]
 
 
 ### Time to Complete
-**30 Min**.
+**35 Min**.
 
 ---
 
@@ -413,5 +413,5 @@ This triggers the forwarding process and your ABAP class will output the receive
 
 ![The forwarded MQTT message was received via the AMC](console-received-message.png)
 
-[VALIDATE_1]
+[DONE]
 [ACCORDION-END]
