@@ -5,7 +5,9 @@ jobs:
       - image: circleci/node:10.16.0
     steps:
       - checkout
-      - run: ./prepare.sh
+      - run:
+          name: Fetch Tests
+          command: sh ./prepare.sh
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
