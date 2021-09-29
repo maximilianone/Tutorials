@@ -1,80 +1,12 @@
 version: 2
-jobs:
-  build-last-commit:
-    docker:
-      - image: circleci/node:10.16.0
-    steps:
-      - checkout
-      - run:
-          name: Fetch Tests
-          command: prepare.sh
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Install dependencies
-          command: npm install --production
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-          - node_modules
-      - run:
-          name: Run test tool on the last commit affected files
-          command: npm run test-last-commit
-          no_output_timeout: '15m'
-  build-all:
-    docker:
-      - image: circleci/node:10.16.0
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Install dependencies
-          command: npm install --production
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - node_modules
-      - run:
-          name: Run test tool on the all tutorials
-          command: npm run test
-          no_output_timeout: '15m'
-  build:
-    docker:
-      - image: circleci/node:10.16.0
-    steps:
-      - run: echo "RUN_BUILD is ${RUN_BUILD}"
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Install dependencies
-          command: |
-            if [[ ${RUN_BUILD} ]]; then
-              npm install --production
-            fi
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - node_modules
-      - run:
-          name: Run test tool on the all tutorials
-          command: |
-            if [[ ${RUN_BUILD} ]]; then
-              npm run test
-            fi
-          no_output_timeout: '15m'
-
+orbs:
+   tutorials-check: maximilianone/tutorials-check@2.0.1
 notify:
   webhooks:
     # gitter hook
     - url: https://webhooks.gitter.im/e/15f197634234d80a32fa
 workflows:
   version: 2
-  commitly:
+  build:
     jobs:
-      - build-last-commit:
-          filters:
-            branches:
-              only:
-                - master
+      - tutorials-check/build-last-commit
