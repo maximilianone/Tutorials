@@ -24,7 +24,7 @@ You can make yourself more familiar with the ABAP Daemon Framework by reading th
 > **Push Channel Protocol (PCP)** is a communications format similar to a simple HTTP message. It consists of header fields (name-value pairs) for metadata and a message body. For further information, have a look at the [Specification of the Push Channel Protocol](https://blogs.sap.com/2015/07/27/specification-of-the-push-channel-protocol-pcp/).
 
 ### Time to Complete
-**20 Min**.
+**25 Min**.
 
 [ACCORDION-BEGIN [Step 1: ](Create a new ABAP Daemon class)]
 ABAP Daemons are instances of an ABAP Daemon class that extend the base class `CL_ABAP_DAEMON_EXT_BASE`.
