@@ -2,8 +2,8 @@
 title: Create a Simple ABAP Daemon
 description: Learn how to create ABAP Daemons and interact with them using PCP messages.
 auto_validation: true
-primary_tag: topic>abap-development
-tags: [ tutorial>intermediate, topic>abap-development  ]
+primary_tag: programming-tool>abap-development
+tags: [ tutorial>intermediate, programming-tool>abap-development  ]
 ---
 
 ## Prerequisites
