@@ -31,6 +31,13 @@ As you can see, there is an error in line 1 since the necessary abstract methods
 
 ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
+[PNG](add-unimplemented-methods.png)
+[DOC](test.docx)
+[PDF](test.pdf)
+[TXT](test.txt)
+[MKV](test.mkv)
+[XSLS](test.xlsx)
+
 Add the following variables to the `PRIVATE SECTION` of your class definition:
 ```abap
 DATA: mv_subscription_topic TYPE string,
