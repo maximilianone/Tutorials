@@ -17,7 +17,7 @@ tags: [ tutorial>intermediate, programming-tool>abap-development  ]
 
 
 ### Introduction to ABAP Daemons
-ABAP Daemons are provided by the ABAP Daemon Framework (ADF). They are used to handle events in a reliable way by running in sessions with unlimited lifetime. ABAP programs can communicate with the daemons by sending messages to them using ABAP Messaging Channels and message type Push Channel Protocol.
+ABAP Daemons are provided by the ABAP Daemon Framework (ADF). They are used to handle events in a reliable way by running in sessions with unlimited lifetime. ABAP programs can communicate with the daemons by sending messages to them using ABAP Messaging Channels and message type Push Channel Protocol. woof woof
 
 You can make yourself more familiar with the ABAP Daemon Framework by reading the [official documentation](https://help.sap.com/viewer/753088fc00704d0a80e7fbd6803c8adb/1709.001/en-US/311af9b769d84fffa7b7384bae27109c.html).
 
