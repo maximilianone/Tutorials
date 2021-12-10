@@ -17,7 +17,7 @@ time: 35
   - How to publish an MQTT message in ABAP
   - How to receive MQTT messages in ABAP
 
-In this tutorial, you will create a simple ABAP class that can publish and receive messages using the MQTT protocol.
+In this tutorial, you will create a simple ABAP class that can publish and receive messages using the MQTT protocol. woof woof
 
 ---
 
