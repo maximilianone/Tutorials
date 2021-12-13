@@ -13,9 +13,9 @@ primary_tag: topic>internet-of-things
 
  -   You have licensed SAP Internet of Things (with the new capacity unit based licensing introduced in August 2020, your company has a Cloud Platform Enterprise Agreement or Pay-As-You-Go for SAP BTP and you have subscribed to the `oneproduct` service plan)
  -   You have setup the subscription for SAP IoT in your global account in a tenant (e.g. in the DEV tenant, the guide for the basic setup is at.
- - You have knowledge how to [manage users](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/a3bc7e863ac54c23ab856863b681c9f8.html) and [role collections](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e1bf57130ef466e8017eab298b40e5e.html) in the SAP Business Technology Platform
- - Your SAP User has at a minimum the `iot_role_collection` created during onboarding of your tenant and the associated roles (see [SAP Help on Providing Authorizations in](https://help.sap.com/viewer/195126f4601945cba0886cbbcbf3d364/latest/en-US/2810dd61e0a8446d839c936f341ec46d.html) ) and all the required roles for the SAP Internet of Things Edge feature, see [Configure Role Collections for Users](https://help.sap.com/viewer/247022ddd1744053af376344471c0821/2109b/en-US/7e0ddf3d1ef24a42b68cd75fc526302c.html#5f0427eab54d467bb18871ce0d41e862.html)
- -   You have knowledge on the containerisation, i.e. [Docker](https://docker.io)
+ - You have knowledge how to  in the SAP Business Technology Platform
+ - Your SAP User has at a minimum the `iot_role_collection` created during onboarding of your tenant and the associated roles (see ) and all the required roles for the SAP Internet of Things Edge feature, see
+ -   You have knowledge on the containerisation, i.e. 
  -   You have knowledge on the Helm (https://helm.sh) package manager, and the runtime installed
 
 ## Details
@@ -192,7 +192,7 @@ The second step consists in the creation of a new Helm solution (chart), and sto
 
     >You have to select in the **Bind to Services** area the **Edge Gateway Service** because the extension you are deploying with this tutorial is interfacing with the APIs exposed by the **Edge Gateway Service**. In case your custom implementation is using the **Persistence Service** APIs you must select **Persistence Service** in the drop down.
 
-    >You can also bind your service to both if the service is invoking **Persistence Service** and **Edge Gateway Service** APIs. You can found further references in the [Consuming Dependent Services](https://help.sap.com/viewer/latest/70108a557bb24b5da8e0ac9cfb344067/2112a/en-US/c0c2743fee0d460390dc0037ede327e1.html) section in the Extension Service official documentation.
+    >You can also bind your service to both if the service is invoking **Persistence Service** and **Edge Gateway Service** APIs. You can found further references in the  section in the Extension Service official documentation.
 
 5.  Press **Create** to create the service.
 
