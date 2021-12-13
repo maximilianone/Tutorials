@@ -1,12 +1,11 @@
 ---
 author_name: Marco Porru
-author_profile: https://github.com/marco-porru
 title: Deploy Extension Service Helm Solution
-description: Configure, compile an Helm solution and deploy it in Extensions UI; create a new service version.
+description: Configure compile an Helm solution and deploy it in Extensions UI create a new service version.
 auto_validation: true
 time: 20
-tags: [ tutorial>advanced ]
-primary_tag: topic>internet-of-things
+primary_tag: programming-tool>abap-development
+tags: [ tutorial>intermediate, programming-tool>abap-development  ]
 ---
 
 ## Prerequisites
