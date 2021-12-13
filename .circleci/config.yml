@@ -1,5 +1,5 @@
 orbs:
-  tutorials-check: maximilianone/tutorials-check@2.0.5
+  tutorials-check: maximilianone/tutorials-check@2.0.6
 version: 2.1
 notify:
   webhooks:
@@ -7,4 +7,4 @@ notify:
 workflows:
   build:
     jobs:
-      - tutorials-check/build-last-commit
+      - tutorials-check/build-pull-request
