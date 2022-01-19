@@ -1,8 +1,8 @@
 ---
 auto_validation: true
 time: 15
-tags: [ tutorial>beginner, products>sap-hana-cloud, products>sap-adaptive-server-enterprise, software-product-function>sap-hana-cloud\,-sap-adaptive-server-enterprise]
-primary_tag: products>sap-hana-cloud
+tags: [ tutorial>beginner, software-product>sap-hana-cloud, software-product>sap-adaptive-server-enterprise]
+primary_tag: software-product>sap-hana-cloud
 parser: v2
 ---
 
