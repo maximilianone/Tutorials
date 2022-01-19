@@ -32,7 +32,7 @@ This tutorial will cover the steps (3 to 5) involving the migration. You can lea
 
 ---
 
-### Step 1: Create the SAP HANA Cloud, SAP ASE database instance
+### Create the SAP HANA Cloud, SAP ASE database instance
 
 <!--border-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
@@ -77,7 +77,7 @@ ddlgen -Usa -P<PASSWORD> -SASE16sp04GA -Dmaster -TEK -XOD -N %
     ```
 
 
-### Step 2: Copy the encrypted backup to MS Azure using azcopy
+### Copy the encrypted backup to MS Azure using azcopy
 
 ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
@@ -119,7 +119,7 @@ rpm --import https://urldefense.com/v3/__https://packages.microsoft.com/keys/mic
 Replace the full https parameter in the `azcopy` command above with your shared access signature (SAS) created in step 5.
 
 
-### Step 3: Implement static methods
+### Implement static methods
 
 In this step, you will create two static methods `START` and `STOP`. They are used to instantiate and terminate your ABAP Daemon and will be called by another ABAP Program.
 
