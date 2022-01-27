@@ -282,6 +282,91 @@ dbisql -c "UID=HDLADMIN;PWD=SamplePassword;host=a111111a-1a11-11aa-a11a-1a1a11a1
 6.	Your User ID will be displayed after the execution of the above command which indicates that a connection to your data lake instance has successfully been made.
 
 [OPTION END]
+[OPTION BEGIN [isql]]
 
+>**Attention**: The following instructions apply to you if you're using isql from the on-premise SAP IQ 16.1 version. Using any other open-source isql versions may lead to errors. Therefore, it's highly recommended to use the same version to avoid any errors.
+
+
+Set up an open client connection to your database. Open a `linux` instance  and use the superuser account. For this example, your `$SYBASE` environment variable points to `/opt/sap` as your root folder.
+
+To use isql, you need to have an **interfaces file**, which you can create in the vim editor. Follow these steps to create the interfaces file:
+
+1.	Navigate to the root folder using command:  `/opt/sap/OCS-16_0/bin`
+
+    !![Root folder](ss-13-root-folder.png)
+
+2.	Enter the vim editor as the superuser account
+
+    a.	`sudo vim interfaces`
+
+    b.	`enter password`
+
+    !![Connected to Root folder](ss-14-connected-root-folder.png)
+
+3.	Once you are in the vim editor, you need the SQL endpoint of your data lake instance. Retrieve it from the SAP HANA Cloud Central as shown earlier.
+
+4.	Enter your respective credentials using the following format:
+
+    ```
+    <Instance_Name>
+
+    query tcp ether <InstanceID>.<Landscape> <Port> ssl="CN=hanacloud.ondemand.com"
+    ```
+
+    **For example**, as shown below:
+
+    ```
+    DEMO_INSTANCE
+
+    query tcp ether a111111a-1a11-11aa-a11a-1a1a11a1a111.iq.hdl.beta-us21.hanacloud.ondemand.com 443 ssl="CN=hanacloud.ondemand.com"
+    ```
+
+    >Note: there must be a tab used at the beginning of the second line, prior to query. Using spaces will not work.
+
+
+    !![SQL Endpoint query](ss-15-sql-endpoint-query.png)
+
+
+
+5.	Once you have entered your details, save the interfaces file, and exit the vim editor.
+
+6.	Before connecting to a database, run the command `source SYBASE.sh`
+
+7.	The successful execution of this command can be verified by running the command `which isql`
+
+    !![Verify SQL query](ss-16-verify-query.png)
+
+8.	If the editor shows location of the isql, this indicates that now you can start an isql session.
+
+
+9.	Start an isql session and connect to your database by running the following command and entering your credentials:
+```
+isql -U <username> -S <Instance_Name> -I<path to interfaces file>
+```
+10.	You will be prompted to enter your password.
+
+    !![Enter Password](ss-17-enter-password.png)
+
+11.	When the editor shows `1>`, you are connected to your database and may run queries.
+
+    For Example, Test query: `select @@ version`
+
+    !![Test query](ss-18-test-query.png)
+
+
+12. If you encounter the following error while trying to start an isql session:
+
+    !![Troubleshoot](ss-19-troubleshoot.png)
+
+    Run the following command before trying again:
+
+    ```
+    unset LANG
+    ```
+
+    >**Attention**: This error was observed while using Ubuntu on a virtual Linux machine. This error will not occur when supported programs are used.
+
+
+[OPTION END]
 
 >In this tutorial, you have learned how to access your standalone data lake in SAP HANA Cloud. In the next tutorial, you will see how to load data into your standalone data lake.
