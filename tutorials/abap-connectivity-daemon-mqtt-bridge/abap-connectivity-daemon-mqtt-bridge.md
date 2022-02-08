@@ -36,6 +36,12 @@ This tutorial will cover the steps (3 to 5) involving the migration. You can lea
 
 <!--border-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
+<!--border;size:500px-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
+
+<!--size:500px-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
+
+![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
+
 Now it's time to make sure your SAP ASE database in SAP HANA Cloud is ready to receive the data from your on-premise SAP ASE database. To ensure this, follow these steps:
 
 1.	Provision an SAP HANA Cloud, SAP ASE database instance. The database in SAP HANA Cloud should be at least the same size as the on-premise one, but you might find that you need to increase the size as you go through the migration and performance test. Find more information on our technical documentation.
@@ -189,6 +195,8 @@ ENDMETHOD.
 > !![Options Screenshot](TabOptions-Screenshot.png)
 
 [OPTION BEGIN [SAP HANA Database Explorer]]
+
+<!-- option (SAP HANA Database Explorer) -->
 After confirming the status, click on the three dots again and select the option to **Open SQL Console** in the SAP HANA Database Explorer.
 >You can also navigate to the same destination by selecting the option to open SAP HANA Database Explorer.
 
@@ -198,6 +206,7 @@ After confirming the status, click on the three dots again and select the option
 
 3.	You can confirm the connection to your standalone data lake from the connection status provided on the menu in the SQL Console.
 
+<!-- option-end -->
 [OPTION END]
 [OPTION BEGIN [dbisql]]
 >Connecting to a data lake instance with Interactive SQL is another option besides using the SAP HANA Database Explorer. If you want to connect using Interactive SQL (dbisql), you need to have it installed on your local system. You can download the Interactive SQL using the link provided in the [technical documentation](https://help.sap.com/viewer/a895964984f210158925ce02750eb580/LATEST/en-US/2fdb23a4fb364e06ace0eea0c9a4afec.html).
