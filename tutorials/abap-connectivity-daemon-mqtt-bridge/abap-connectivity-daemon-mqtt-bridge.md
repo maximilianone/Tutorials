@@ -33,20 +33,35 @@ This tutorial will cover the steps (3 to 5) involving the migration. You can lea
 ---
 
 ### Create the SAP HANA Cloud, SAP ASE database instance
+1. Test
 
 <!--border-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
+2. Test
+
 text
+
+1. Test
 
 <!--border;size:500px-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
+2. Test
+
 text
+
+1. Test
 
 <!--size:500px-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
+2. Test
+
 text
 
+1. Test
+
 ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
+
+2. Test
 
 Now it's time to make sure your SAP ASE database in SAP HANA Cloud is ready to receive the data from your on-premise SAP ASE database. To ensure this, follow these steps:
 
