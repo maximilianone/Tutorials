@@ -43,7 +43,7 @@ text
 
 1. Test
 
-<!--border;size:500px-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
+    <!--border;size:500px-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
 2. Test
 
