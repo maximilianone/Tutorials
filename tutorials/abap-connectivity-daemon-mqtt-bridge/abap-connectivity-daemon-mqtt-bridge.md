@@ -6,7 +6,7 @@ primary_tag: software-product>sap-hana-cloud
 parser: v2
 ---
 
-# Migrate SAP ASE Database from On-Premise to SAP HANA Cloud Test
+# Migrate SAP ASE Database from On-Premise to SAP HANA Cloud
 
 <!-- description --> Description
 
@@ -36,9 +36,15 @@ This tutorial will cover the steps (3 to 5) involving the migration. You can lea
 
 <!--border-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
+text
+
 <!--border;size:500px-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
+text
+
 <!--size:500px-->    ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
+
+text
 
 ![Add unimplemented methods in ABAP Development Tools](add-unimplemented-methods.png)
 
