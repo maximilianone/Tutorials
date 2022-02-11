@@ -24,7 +24,7 @@ Migrating an SAP ASE database from on-premise to the cloud requires a bit of pre
 
 1.	Pre-requisites for migration
 2.	Pre-Migration - Encrypt the on-premise SAP ASE database
-3.	Migration - Create the SAP HANA Cloud, SAP ASE database
+3.	Migration - Create the SAP HANA Cloud, SAP ASE databqase
 4.	Migration - Copy the Encrypted Backup to MS Azure
 5.	Migration - Load the Encrypted Backup
 
