@@ -14,7 +14,7 @@ parser: v2
 - You have completed the [previous tutorial](hana-cloud-ase-migration-2) on how to encrypt your SAP ASE database to migrate from on-premise to SAP HANA Cloud.
 
 ## You will learn
-- How to create an SAP HANA Cloud, SAP ASE database instance
+- How to create an SAP HANA Cloud, SAP ASE database instance slovo
 - How to copy the encrypted backup to MS Azure using **`azcopy`**
 - How to load the encrypted backup
 
