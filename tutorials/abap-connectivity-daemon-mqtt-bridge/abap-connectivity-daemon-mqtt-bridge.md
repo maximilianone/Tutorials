@@ -200,7 +200,7 @@ ENDMETHOD.
 >
 > !![Options Screenshot](TabOptions-Screenshot.png)
 
-[OPTION BEGIN [SAP HANA Database Explorer]]
+[OPTION BEGIN [SAP]]
 
 <!-- option (SAP HANA Database Explorer) -->
 After confirming the status, click on the three dots again and select the option to **Open SQL Console** in the SAP HANA Database Explorer.
