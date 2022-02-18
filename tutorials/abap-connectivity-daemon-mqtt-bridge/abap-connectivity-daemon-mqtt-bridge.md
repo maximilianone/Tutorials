@@ -6,7 +6,7 @@ primary_tag: software-product>sap-hana-cloud
 parser: v2
 ---
 
-# Migrate SAP ASE Database from On-Premise to SAP HANA Cloud Test
+# Migrate SAP ASE Database from On-Premise to SAP HANA Cloud
 
 <!-- description --> Migrate SAP ASE Database from On-Premise to SAP HANA Cloud
 
@@ -200,7 +200,7 @@ ENDMETHOD.
 >
 > !![Options Screenshot](TabOptions-Screenshot.png)
 
-[OPTION BEGIN [SAP]]
+[OPTION BEGIN [SAP HANA Database Explorer]]
 
 <!-- option (SAP HANA Database Explorer) -->
 After confirming the status, click on the three dots again and select the option to **Open SQL Console** in the SAP HANA Database Explorer.
