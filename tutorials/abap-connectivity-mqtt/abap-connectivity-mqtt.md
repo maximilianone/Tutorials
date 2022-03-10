@@ -1,5 +1,5 @@
 ---
-title: Publish and Receive MQTT Messages
+title: Publish and Receive MQTT Messages Tutorial
 description: Publish and receive MQTT messages in ABAP using the ABAP MQTT Client.
 auto_validation: true
 primary_tag: topic>abap-development
