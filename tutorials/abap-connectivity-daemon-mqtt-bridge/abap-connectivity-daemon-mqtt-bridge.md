@@ -166,7 +166,6 @@ METHOD start.
   " start the daemon application using the ABAP Daemon Manager
   cl_abap_daemon_client_manager=>start(
       i_class_name = 'ZCL_TUTORIAL_MQTT_DAEMON'
-      i_name       = CONV #( iv_daemon_name )
       i_priority   = cl_abap_daemon_client_manager=>co_session_priority_low
       i_parameter  = lo_pcp ).
 ENDMETHOD.
