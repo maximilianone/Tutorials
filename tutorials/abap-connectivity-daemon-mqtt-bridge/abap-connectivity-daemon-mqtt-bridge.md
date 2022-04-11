@@ -1,12 +1,10 @@
 ---
 auto_validation: true
 time: 20
-tags: [ tutorial>beginner, software-product>sap-hana-cloud, software-product>sap-adaptive-server-enterprise, software-product>meter-operation-service-billing ]
 primary_tag: software-product>sap-hana-cloud
 parser: v2
 ---
 
-# Migrate SAP ASE Database from On-Premise to SAP HANA Cloud Test
 
 <!-- description --> Migrate SAP ASE Database from On-Premise to SAP HANA Cloud
 
