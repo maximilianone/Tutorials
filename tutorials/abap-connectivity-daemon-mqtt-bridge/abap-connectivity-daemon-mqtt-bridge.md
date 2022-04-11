@@ -6,7 +6,7 @@ primary_tag: software-product>sap-hana-cloud
 parser: v2
 ---
 
-# Migrate SAP ASE Database from On-Premise to SAP HANA Cloud Test
+# Migrate SAP ASE Database from On-Premise to SAP HANA Cloud Test Of
 
 <!-- description --> Migrate SAP ASE Database from On-Premise to SAP HANA Cloud
 
