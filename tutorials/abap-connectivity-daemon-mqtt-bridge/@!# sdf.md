@@ -16,7 +16,7 @@ parser: v2
 ## You will learn
 - How to create an SAP HANA Cloud, SAP ASE database instance slovo
 - How to copy the encrypted backup to MS Azure using **`azcopy`**
-- How to load the encrypted backup
+- How to load the encrypted backup something
 
 ## Intro
 
