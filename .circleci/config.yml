@@ -7,4 +7,4 @@ notify:
 workflows:
   build:
     jobs:
-      - tutorials-check/build
+      - tutorials-check/build-pull-request
