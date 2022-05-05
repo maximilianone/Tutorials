@@ -1,5 +1,5 @@
 ---
-title: Publish and Receive MQTT Messages
+title: Publish and Receive MQTT Messages Tutorial
 description: Publish and receive MQTT messages in ABAP using the ABAP MQTT Client.
 auto_validation: true
 primary_tag: topic>abap-development
@@ -9,25 +9,25 @@ time: 35
 
 ## Prerequisites
 - [Create an ABAP project in Eclipse](abap-create-project)
-- The ABAP MQTT Client is available on **ABAP Platform 1809** and above.
+- The ABAP MQTT Client is available on **ABAP Platform 1809(v2)** and above.
 - You are using **ABAP Development Tools**.
 
 ## Details
 ### You will learn
-  - How to publish an MQTT message in ABAP
+  - How to publish an MQTT message in **ABAP(v2)**
   - How to receive MQTT messages in ABAP
 
 In this tutorial, you will create a simple ABAP class that can publish and receive messages using the MQTT protocol. woof woof
 
 ---
 
-[ACCORDION-BEGIN [Step 1: ](Create a new ABAP class)]
+[ACCORDION-BEGIN [Step 1: ](Create a new(v2) ABAP class)]
 Create a new ABAP class called `ZCL_TUTORIAL_MQTT` and implement the interface `IF_MQTT_EVENT_HANDLER` by adding the snippet to the `PUBLIC SECTION` of your class:
 
 ```ABAP
 INTERFACES if_mqtt_event_handler.
 ```
-Next, add the 6 unimplemented abstract methods by clicking the light bulb to the right of the line you just inserted and select **Add 6 unimplemented methods**.
+Next, add the 6 unimplemented**JavaScript(v2) Operator** abstract methods by clicking(v2) the light bulb (v2) to the right of the line you just inserted and select **Add 6 unimplemented methods**.
 
 ![Add 6 unimplemented methods](lightBulb.png)
 
