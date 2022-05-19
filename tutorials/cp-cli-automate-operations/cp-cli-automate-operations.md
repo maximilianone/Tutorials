@@ -17,7 +17,7 @@ primary_tag: software-product>sap-business-technology-platform
 ## Details
 
 ### You will learn  
-- How to use a script to automate account admin processes
+- How to use a script to automate account admin processes Test
 
 ### Time to complete
 **30Min**
