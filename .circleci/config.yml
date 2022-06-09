@@ -1,5 +1,5 @@
 orbs:
-  tutorials-check: maximilianone/tutorials-check@2.0.18
+  tutorials-check: maximilianone/tutorial-checker@1.0.1
 version: 2.1
 notify:
   webhooks:
