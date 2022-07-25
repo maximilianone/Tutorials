@@ -1,5 +1,5 @@
 ---
-title: Validation form with parser v2 QA Green test
+title: Validation form with parser v2 QA Green
 description: description 
 primary_tag: topic>mobile
 tags: [topic>User-Experience, tutorial>community, software-product>Analytics, tutorial>beginner]
