@@ -15,7 +15,7 @@ keywords: validation, parser v2
 ---
 
 # Title Title from the Tutorial body
-<!-- description --> Description from the Tutorial body Test
+<!-- description --> Description from the Tutorial body
 
 ## Prerequisites
  - **Proficiency:** Beginner 
