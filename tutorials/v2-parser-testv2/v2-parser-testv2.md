@@ -11,7 +11,7 @@ keywords: validation, parser v2
 ---
 
 # Title Title from the Tutorial body
-<!-- description -->         Description from the Tutorial body
+<!-- description --> Description from the Tutorial body
 
 ## You will learn  
 Now that you have set up a Destination in the HANA Cloud Platform (HCP) cockpit, you will connect that destination to your local application.  
