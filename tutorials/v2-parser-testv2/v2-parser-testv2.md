@@ -25,14 +25,14 @@ Now that you have set up a Destination in the HANA Cloud Platform ### (HCP) cock
 ## Intro
 
 Virtual tables point to data #####stored in another ##### database.  Federated queries##### join local and virtual tables.  
-Virtual tables point to data #####stored in another ##### database.  Federated queries##### join local and virtual tables.  
+Virtual tables point to data ### stored in another ##### database.  Federated queries##### join local and virtual tables.  
 Virtual tables point to data #####stored in another ##### database.  Federated queries##### join local and virtual tables.  
 
 
 ### Create package
 
-1. Create a new package for this `my_package#####` tutorial, by choosing **New > ABAP Package**.
-Name your package (my_package#####)
+1. Create a new package for this `my_package###` tutorial, by choosing **New > ABAP Package**.
+Name your package (my_package ### )
 
     <!-- border --> ![step1a-new-package](step1a-new-package.png)
 
