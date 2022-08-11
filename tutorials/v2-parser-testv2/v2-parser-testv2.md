@@ -31,12 +31,12 @@ Virtual tables point to data #####stored in another ##### database.  Federated q
 
 ### Create package
 
-1. Create a new package for this tutorial, by choosing **New > ABAP Package**.
+1. Create a new package for this `my_package#####` tutorial, by choosing **New > ABAP Package**.
 Name your package (my_package#####)
 
     <!-- border --> ![step1a-new-package](step1a-new-package.png)
 
-2. Enter a name **`Package Z_ENHANCE_CDS_XXX`** and description **Enhance CDS Tutorial 2020**, then follow the wizard.
+2. Enter a name **`Package Z_ENHANCE_CDS_###`** and description **Enhance CDS Tutorial 2020**, then follow the wizard.
 
     <!-- border; size:250px --> ![step1a-create-package](step1a-create-package.png)
 
