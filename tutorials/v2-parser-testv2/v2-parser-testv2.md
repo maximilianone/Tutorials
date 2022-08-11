@@ -25,6 +25,8 @@ Now that you have set up a Destination in the HANA Cloud Platform ### (HCP) cock
 ## Intro
 
 Virtual tables point to data #####stored in another ##### database.  Federated queries##### join local and virtual tables.  
+Virtual tables point to data #####stored in another ##### database.  Federated queries##### join local and virtual tables.  
+Virtual tables point to data #####stored in another ##### database.  Federated queries##### join local and virtual tables.  
 
 
 ### Create package
