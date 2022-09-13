@@ -111,12 +111,6 @@ Name your package (my_package ### )
 >>>>Warning
 >>>>This is a Warning. 
 
->Warning
->jhkjhkjhkjhkj
->> ### Warning
->>>### Warning
->>>>### Warning
->>>>This is a Warning. 
 
 >### Warning test
 >jhkjhkjhkjhkj
