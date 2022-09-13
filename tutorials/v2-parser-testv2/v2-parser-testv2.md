@@ -93,6 +93,15 @@ Name your package (my_package ### )
  
 ### Multi-choice 
 
+***There are three different types of messages: Note, Caution and Warning.***
+
+>### Warning
+>jhkjhkjhkjhkj
+>>### Warning
+>>>### Warning
+>>>>### Warning
+>>>>This is a Warning. 
+
 ### Long question 
 
 ### One letter in the question
