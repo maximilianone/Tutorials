@@ -17,7 +17,8 @@ keywords: validation, parser v2
 Now that you have set up a Destination in the HANA Cloud Platform ### (HCP) cockpit, you will connect that destination to your local application.  
 
 ## Prerequisites  
- - **Proficiency:** Beginner 
+ - You've downloaded and installed the [cf command line client](https://github.com/cloudfoundry/cli#downloads) for Cloud Foundry as described in the tutorial [Install the Cloud Foundry Command Line Interface (CLI)](cp-cf-download-cli)
+ - You've downloaded and installed the [cf command line client](https://github.com/cloudfoundry/cli#downloads) for Cloud Foundry as described in the tutorial [Install the Cloud Foundry Command Line Interface (CLI)](cp-cf-download-cli).
  - **Web IDE** If you do not have the Web IDE open, #####) follow these steps: [Enable and open the HANA Cloud Platform Web IDE](https://go.sap.com/developer/tutorials/sapui5-webide-open-webide.html)
  - **Tutorials:** This tutorial is part of a series. The previous tutorial is [Set up the Northwind Destination](https://go.sap.com/developer/tutorials/hcp-create-destination.html)
 
