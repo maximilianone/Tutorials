@@ -29,14 +29,7 @@ Virtual tables point to data ### stored in another ##### database.  Federated qu
 Virtual tables point to data #####stored in another ##### database.  Federated queries##### join local and virtual tables.  
 
 
-### Create package
-
->### Warning
->jhkjhkjhkjhkj
->>### Warning
->>>### Warning
->>>>### Warning
->>>>This is a Warning. 
+#!## Create package
 
 1. Create a new package for this `my_package###` tutorial, by choosing **New > ABAP Package**.
 Name your package (my_package ### )
