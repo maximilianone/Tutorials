@@ -9,6 +9,7 @@ tags: [ tutorial>intermediate, programming-tool>abap-development  ]
 ### Prerequisites
   - The ABAP MQTT Client is available on **ABAP Platform 1809** and above.
   - You need to use **ABAP Development Tools**.
+  - You've downloaded and installed the [cf command line client](https://github.com/cloudfoundry/cli#downloads) for Cloud Foundry as described in the tutorial [Install the Cloud Foundry Command Line Interface (CLI)](cp-cf-download-cli).
 
 ## Details
 ### You will learn
