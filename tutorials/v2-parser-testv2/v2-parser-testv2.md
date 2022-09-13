@@ -1,147 +1,139 @@
 ---
-primary_tag: topic>mobile
-tags: [topic>User-Experience, tutorial>community, software-product>Analytics, tutorial>beginner]
-time: 20
-author_profile: https://github.com/ksAutotests
-author_name: ksAutotests
-creator_name: Oleksandra K.
-creator_profile: https://github.com/Oleksandra2
+author_name: René Jeglinsky
+author_profile: https://github.com/renejeglinsky
+title: Deploy a CAP Business Service to SAP Business Technology Platform
+description: This tutorial shows you how to deploy your SAP Cloud Application Programming Model (CAP) application to SAP Business Technology Platform (BTP), Cloud Foundry environment using SAP HANA Cloud service.
+auto_validation: true
+primary_tag: software-product-function>sap-cloud-application-programming-model
+tags: [ tutorial>beginner, programming-tool>node-js, software-product>sap-business-technology-platform, software-product>sap-fiori, software-product>sap-hana-cloud, software-product-function>sap-cloud-application-programming-model ]
+time: 30
 parser: v2
-keywords: validation, parser v2
 ---
 
-# Title Title from the Tutorial body test
-<!-- description --> Description from th e Tutorial body
+## You will learn
+  - How to deploy your CAP business service on SAP BTP and binding appropriate service instances. See the [Developer Guide for Cloud Foundry](https://docs.cloudfoundry.org/devguide/) for more details
 
-## You will learn  
-Now that you have set up a Destination in the HANA Cloud Platform ### (HCP) cockpit, you will connect that destination to your local application.  
+## Prerequisites
+- You've finished the tutorial [Create a CAP Business Service with Node.js using Visual Studio Code](cp-apm-nodejs-create-service).
+- If you don't have a Cloud Foundry Trial subaccount and dev space on [SAP BTP](https://cockpit.hanatrial.ondemand.com/cockpit/) yet, create your [Cloud Foundry Trial Account](hcp-create-trial-account) with **US East (VA) as region** and, if necessary [Manage Entitlements](cp-trial-entitlements).
+- You've downloaded and installed the [cf command line client](https://github.com/cloudfoundry/cli#downloads) for Cloud Foundry as described in the tutorial [Install the Cloud Foundry Command Line Interface (CLI)](cp-cf-download-cli).
+- You've downloaded and installed the [MBT Built Tool](https://sap.github.io/cloud-mta-build-tool/download/)
+- You've downloaded and installed the [MultiApps CF CLI plugin](https://github.com/cloudfoundry/multiapps-cli-plugin/blob/master/README.md).
+- You've to [Use an existing SAP HANA Cloud service instance](https://developers.sap.com/tutorials/btp-app-hana-cloud-setup.html#42a0e8d7-8593-48f1-9a0e-67ef7ee4df18) or [set up a new SAP HANA Cloud service instance](https://developers.sap.com/tutorials/btp-app-hana-cloud-setup.html#3b20e31c-e9eb-44f7-98ed-ceabfd9e586e) to deploy your CAP application
 
-## Prerequisites  
- - You've downloaded and installed the [cf command line client](https://github.com/cloudfoundry/cli#downloads) for Cloud Foundry as described in the tutorial [Install the Cloud Foundry Command Line Interface (CLI)](cp-cf-download-cli)
- - You've downloaded and installed the [cf command line client](https://github.com/cloudfoundry/cli) for Cloud Foundry as described in the tutorial [Install the Cloud Foundry Command Line Interface (CLI)](cp-cf-download-cli).
- - **Web IDE** If you do not have the Web IDE open, #####) follow these steps: [Enable and open the HANA Cloud Platform Web IDE](https://go.sap.com/developer/tutorials/sapui5-webide-open-webide.html)
- - **Tutorials:** This tutorial is part of a series. The previous tutorial is [Set up the Northwind Destination](https://go.sap.com/developer/tutorials/hcp-create-destination.html)
 
+---
 
 ## Intro
 
-Virtual tables point to data #####stored in another ##### database.  Federated queries##### join local and virtual tables.  
-Virtual tables point to data ### stored in another ##### database.  Federated queries##### join local and virtual tables.  
-Virtual tables point to data #####stored in another ##### database.  Federated queries##### join local and virtual tables. 
->### Warning
->jhkjhkjhkjhkj
->>Warning
->>>Warning
->>>>Warning
->>>>This is a Warning.  
+It's now time to switch to SAP HANA as a database and prepare your project for an MTA deployment to SAP BTP Cloud Foundry. To continue with this tutorial you need to [Use an existing SAP HANA Cloud service instance](https://developers.sap.com/tutorials/btp-app-hana-cloud-setup.html#42a0e8d7-8593-48f1-9a0e-67ef7ee4df18) or [set up a new SAP HANA Cloud service instance](https://developers.sap.com/tutorials/btp-app-hana-cloud-setup.html#3b20e31c-e9eb-44f7-98ed-ceabfd9e586e) to deploy your CAP application.
+
+> Your SAP HANA Cloud service instance will be automatically stopped overnight, according to the server region time zone. That means you need to restart your instance every day, before you start working with your trial.
 
 
-### Create package
+### Enhance project configuration for production
 
-1. Create a new package for this `my_package###` tutorial, by choosing **New > ABAP Package**.
-Name your package (my_package ### )
+1. If `cds watch` is still running in VS Code, choose <kbd>Ctrl</kbd> + <kbd>C</kbd> in the command line to stop the service.
 
-    <!-- border --> ![step1a-new-package](step1a-new-package.png)
+2. To prepare the project, execute in the root level of your project in VS Code:
 
-2. Enter a name **`Package Z_ENHANCE_CDS_###`** and description **Enhance CDS Tutorial 2020**, then follow the wizard.
+    ```Shell/Bash
+    cds add hana,mta,xsuaa,approuter --for production
+    ```
 
-    <!-- border; size:250px --> ![step1a-create-package](step1a-create-package.png)
+    > `--for production` adds all configuration added by this command in the `package.json` file into a `cds.requires.[production]` block.
 
-    <!-- border --> ![app-create](final-app-create.png)
-    
-3. Replace strings (these commands have been adapted from the standard [Luigi React example](https://github.com/SAP/luigi/blob/master/scripts/setup/react.sh).) Note that you may get a warning such as `event not found`, but this can safely be ignored. Copy and paste the following:
+    > `hana` configures deployment for SAP HANA to use the `hdbtable` and `hdbview` formats. The default format of `hdbcds` is not available on SAP HANA Cloud. In addition, the `hdb` driver for SAP HANA is added as a dependency. A data source of type `hana-cloud` is added in the `cds.requires.[production].db` block. See section [Node.js configuration](https://cap.cloud.sap/docs/node.js/cds-env#profiles) in the CAP documentation for more details.
 
-```Shell [2,5,7,10,12]
-sed "s/const HtmlWebpackPlugin = require('html-webpack-plugin');/const HtmlWebpackPlugin = require('html-webpack-plugin');const CopyWebpackPlugin = require('copy-webpack-plugin');/g" config/webpack.config.js > config/webpack.config.tmp.js && mv config/webpack.config.tmp.js config/webpack.config.js
-###
-sed "s/new HtmlWebpackPlugin(/new CopyWebpackPlugin([\
-{context: ### 'public', to: 'index.html', from: 'index.html'  },\
-{context: 'node_modules\/@luigi-project\/core',to: '.\/luigi-core',from: {glob: '**',dot: true}}],\
-{ignore: ['.gitkeep', '**\/.DS_Store', '**\/Thumbs.db'],debug: 'warning'\
-}),\
-new HtmlWebpackPlugin(/g" config/webpack.config.js > config/webpack.config.tmp.js && mv config/webpack.config.tmp.js config/webpack.config.js
+    > `mta` adds the `mta.yaml` file. This file reflects your project configuration.
 
-sed "s/template: paths.appHtml,/template: paths.appHtml,\
-filename: 'sampleapp.html',/g" config/webpack.config.js > config/webpack.config.tmp.js && mv config/webpack.config.tmp.js config/webpack.config.js
+    > `xsuaa` creates an `xs-security.json` and also the needed configuration in the `mta.yaml` file. An authentication of kind `xsuaa` is added in the `cds.requires.[production].auth` block.
 
-sed "s/public\/index.html/public\/sampleapp.html/g" config/paths.js > config/paths.tmp.js && mv config/paths.tmp.js config/paths.js
+    > `approuter` adds the configuration and needed files for a standalone AppRouter so that the authentication flow works after deployment.
 
-sed "s/publicUrl + '\/index.html',/publicUrl + '\/sampleapp.html',/g" config/webpack.config.js > config/webpack.config.tmp.js && mv config/webpack.config.tmp.js config/webpack.config.js
+    Learn more about those steps in the [Deploy to Cloud Foundry](https://cap.cloud.sap/docs/guides/deployment/to-cf#prepare-for-production) guide in the CAP documentation.
 
-sed "s/const isWsl = require('is-wsl');//g" config/webpack.config.js > config/webpack.config.tmp.js && mv config/webpack.config.tmp.js config/webpack.config.js
+3. (Optional) To enable SAP Fiori preview add the following configuration in the `package.json` of your `my-bookshop` project in VS Code:
 
-#This can throw a warning, it can be ignored
-sed "s/!isWsl/true/g" config/webpack.config.js > config/webpack.config.tmp.js && mv config/webpack.config.tmp.js config/webpack.config.js
+    ```JSON
+    "cds": {
+      "features": {
+        "fiori_preview": true
+      },
+    }
 
-echo "const path = require('path');
-module.exports = {
-	entry: './src/luigi-config/luigi-config.es6.js',
-	output: {
-		filename: 'luigi-config.js',
-		path: path.resolve(__dirname, 'public'),
-	},
-};">webpack.config.js
+    ```
+    > `fiori_preview:true` enables SAP Fiori preview also in `production` mode as you saw it in your local application in the previous tutorial in step 4 when using `cds watch`. This feature is meant to help you during development and should not be used in productive applications.
 
-sed 's/"scripts": {/"scripts": {\
-\    "buildConfig":"webpack --config webpack.config.js",/1' package.json > p.tmp.json && mv p.tmp.json package.json
+    > Don't edit the `gen/db/package.json` file.
 
-echo ### '{
-	"globals": {
-		"Luigi": "readonly"
-	}
-}'>.eslintrc.json
-```
+### Identify SAP BTP Cloud Foundry endpoint
 
-[DONE]
+The Cloud Foundry API endpoint is required so that you can log on to your SAP BTP Cloud Foundry space through Cloud Foundry CLI.
 
-### Build a Single Page Application Using UI5 Web Components for React 
-   
-### Single-choice 
+1. Go to the [SAP BTP Trial Cockpit](https://cockpit.hanatrial.ondemand.com/cockpit#/home/trial) and choose **Go To Your Trial Account**.
 
-[EMBEDDED-VIDEO [](/content/dam/site/sapcom/multimedia/2017/12/746085f5-e27c-0010-82c7-eda71af511fa.mp4)]
-## This is an h2 header
+    <!-- border -->![business technology platform cockpit view](cockpit.png)
 
-[EMBEDDED-VIDEO [](/content/dam/site/sapcom/multimedia/2017/12/746085f5-e27c-0010-82c7-eda71af511fa.mp4)]
-#### This is an h4 header
+2. From the **Account Explorer** overview navigate to your subaccount.
 
-[EMBEDDED-VIDEO [](/content/dam/site/sapcom/multimedia/2017/12/746085f5-e27c-0010-82c7-eda71af511fa.mp4)]
-###### This is an h6 header
- 
-### Multi-choice 
+    <!-- border -->![subaccount tile](subaccount.png)
 
-***There are three different types of messages: Note, Caution and Warning.***
+3. From your subaccount copy the **Cloud Foundry Environment API Endpoint** value.
 
->Warning
->jhkjhkjhkjhkj
->>Warning
->>>Warning
->>>>Warning
->>>>This is a Warning. 
+    <!-- border -->![CF API endpoint value](api_endpoint.png)
 
+4. Go back to VS Code to the command line. Authenticate with your login credentials using the following command:
 
->### Warning
->jhkjhkjhkjhkj
->>Warning
->>>Warning
->>>>Warning
->>>>This is a Warning. 
+    ```Shell/Bash
+    cf login
+    ```
 
->### Warning
->jhkjhkjhkjhkj
->>### Warning
->>>### Warning
->>>>### Warning
->>>>This is a Warning. 
+    > For this you need the cf command line client, see the prerequisites.
 
-TextTest
+    > This will ask you to select Cloud Foundry API, org, and space.
 
-### Long question 
+    > The API Endpoint is taken by default. If you want to change the API Endpoint use `cf api <CF_API_ENDPOINT>` to change the API. Replace `<CF_API_ENDPOINT>` with the actual value you obtained in the previous step.
 
-### One letter in the question
+    > If you don't know whether you're logged on to Cloud Foundry or if you're wondering to which Cloud Foundry org and space are you logged on, you can always use `cf target` in a terminal to find out.
 
-### One digit in the question
+### Deploy using cf deploy
 
-### New step for test
-Test test test test test test test test test test test test test test 
- 
+SAP provides an application format that respects the single modules and their technologies and keeps those modules in the same lifecycle: [Multitarget Application](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/d04fc0e2ad894545aebfd7126384307c.html?version=Cloud)
 
+The MBT Build tool uses the `mta.yaml` file that has been created using `cds add mta` before, to build the deployable archive. The MultiApps CF CLI plugin adds the `deploy` command and orchestrates the deployment steps.
+
+1. In VS Code, in the root of your project, execute the following command to build the archive.
+    ```Shell/Bash
+    mbt build -t gen --mtar mta.tar
+    ```
+
+    > For this you need the MBT Build Tool, see the prerequisites.
+
+    The `-t` option defines the target folder of the build result as the `gen` folder of your project. As part of this build implicitly `cds build --production` is executed. This implicit build uses then all the configuration you've added in the step 1.2 when using `--for production`.
+
+2. Deploy the archive using `cf deploy`.
+    ```Shell/Bash
+    cf deploy gen/mta.tar
+    ```
+
+    > For this you need the MultiApps CF CLI plugin, see the prerequisites.
+
+    During deployment all needed service instances are created and the applications as well as database artifacts are deployed.
+
+    > This process takes some minutes. In this one step the archive is uploaded to Cloud Foundry, service instances are created, the applications are staged, and then deployed to their target runtimes.
+
+3. In the deploy log, find the application URL of `my-bookshop`:
+
+    ```Shell/Bash
+    Application "my-bookshop" started and available at "[org]-[space]-my-bookshop.cfapps.[region].hana.ondemand.com"
+    ```
+    This is the URL of the AppRouter, which enforces the authentication flow.
+
+4. Open this URL in the browser and try out the provided links, for example, `.../catalog/Books`. Application data is fetched from SAP HANA. If enabled in step 1.3 you can also try the **Fiori preview**.
+
+    <!-- border -->![application preview](application_cloud_fiori.png)
+
+> What you achieved
+>
+> You've deployed your CAP application as multitarget application including deployment to SAP HANA Cloud, using the standalone AppRouter, and using authentication (XSUAA). Congratulations!
