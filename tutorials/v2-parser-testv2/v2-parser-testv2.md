@@ -70,7 +70,7 @@ It's now time to switch to SAP HANA as a database and prepare your project for a
 
 ### Identify SAP BTP Cloud Foundry endpoint
 
-The Cloud Foundry API endpoint is required so that you can log on to your SAP BTP Cloud Foundry space through Cloud Foundry CLI.
+The Cloud Foundry API endpoint is required so  test that you can log on to your SAP BTP Cloud Foundry space through Cloud Foundry CLI.
 
 1. Go to the [SAP BTP Trial Cockpit](https://cockpit.hanatrial.ondemand.com/cockpit#/home/trial) and choose **Go To Your Trial Account**.
 
