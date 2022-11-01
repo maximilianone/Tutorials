@@ -1,0 +1,17 @@
+name: Close inactive issues
+on:
+  workflow_dispatch
+
+
+
+jobs:
+  close-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/stale@v5
+        with:
+          days-before-issue-close: 0
+          close-issue-message: "This issue was closed."
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
