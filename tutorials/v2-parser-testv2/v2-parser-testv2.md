@@ -37,14 +37,14 @@ The following figure shows the system landscape recommended for developing, oper
 
 1. Global Account for Development    
 
- - 01 Develop - Holds the development system (DEV) used for continuous development and the correction system (COR) used to develop bug fixes and patches for already released versions of your add-on
- - 02 Test - Contains a test system (TST) for testing the changes released from development and the quality assurance system (QAS) to test the bug fixes and patches for already released versions of your add-on  
- - 03 Build/Assemble - Holds the system created for the add-on assembly. Software components are imported into this system, ATC checks executed, delivery packages for the add-on created
- - 04 Build/Test - Holds the system created for add-on installation test performed after add-on build
- - 05 Provide - Contains a production like system (AMT) to test multi-tenancy aspects of the SaaS solution (client separation, data isolation...)
- - 06 Consume - Consumer sub-accounts for facilitating production like tests
+	- 01 Develop - Holds the development system (DEV) used for continuous development and the correction system (COR) used to develop bug fixes and patches for already released versions of your add-on
+	- 02 Test - Contains a test system (TST) for testing the changes released from development and the quality assurance system (QAS) to test the bug fixes and patches for already released versions of your add-on  
+	- 03 Build/Assemble - Holds the system created for the add-on assembly. Software components are imported into this system, ATC checks executed, delivery packages for the add-on created
+	- 04 Build/Test - Holds the system created for add-on installation test performed after add-on build
+	- 05 Provide - Contains a production like system (AMT) to test multi-tenancy aspects of the SaaS solution (client separation, data isolation...)
+	- 06 Consume - Consumer sub-accounts for facilitating production like tests
 
- ![Global Account For Development](GlobalAccountForDev.png)    
+	![Global Account For Development](GlobalAccountForDev.png)    
 
 
 2. Global Account for Production  
