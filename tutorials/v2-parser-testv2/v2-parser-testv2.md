@@ -49,10 +49,10 @@ The following figure shows the system landscape recommended for developing, oper
 
 2. Global Account for Production  
 
- - 05 Provide - Provider sub-account for production use - Contains various services for SaaS enablement, ABAP system (AMT) provisioned via ABAP Solution service
- - 06 Consume - Consumer sub-accounts for production - Each of your customers is assigned a dedicated consumer sub-account
-  
- ![GlobalAccountForProd](GlobalAccountForProd.png)
+	- 05 Provide - Provider sub-account for production use - Contains various services for SaaS enablement, ABAP system (AMT) provisioned via ABAP Solution service
+	- 06 Consume - Consumer sub-accounts for production - Each of your customers is assigned a dedicated consumer sub-account
+	  
+	![GlobalAccountForProd](GlobalAccountForProd.png)
 
 
 ### ABAP Development/UI Development
