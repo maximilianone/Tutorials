@@ -1,188 +1,378 @@
 ---
 parser: v2
 auto_validation: true
-time: 5
-tags: [ tutorial>beginner, programming-tool>abap-development, tutorial>license]
-primary_tag: software-product>sap-btp--abap-environment
+time: 30
+tags: [ tutorial>intermediate, software-product>sap-btp--abap-environment, software-product>sap-business-technology-platform, tutorial>license]
+primary_tag: programming-tool>abap-development
+author_name: Julie Plummer
+author_profile: https://github.com/julieplummer20
 ---
 
-# SAP BTP ABAP Environment SaaS Overview
-<!-- description --> Overview of SaaS on SAP BTP, ABAP Environment
+# Call a Remote Function Module From SAP Business Technology Platform (BTP), ABAP Environment
+<!-- description --> Call a remote function module located in an on-premise system, such as a SAP S/4HANA System, from the ABAP Environment.
 
 ## Prerequisites
- - You've purchased entitlements that are necessary for the account setup. See [Prepare](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/3bf575a3dc5043f895f8bd411d2a86a1.html?locale=en-US&version=Cloud#loio4338854e3133407abb47d3a281dbd1e1)
- - You've registered a namespace at SAP, for example /NAMESPC/. See [Register a Namespace](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/3bf575a3dc5043f895f8bd411d2a86a1.html?locale=en-US&version=Cloud#loiocc5a3c6f78cf4889960c314dd09a5060)
- - You've registered your add-on at SAP, for example /NAMESPC/PRODUCTX. See [Register a Product](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/dc15fb4ebab5453fa4641b98190b1f85.html?locale=en-US&version=Cloud)
- - You've set up a Jenkins build pipeline and have ensured that an external Git repository is available for the pipeline definition. See [Set up add-on build](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/3bf575a3dc5043f895f8bd411d2a86a1.html?locale=en-US&version=Cloud#loioccf0c1ef30ce4d6aa6e39bb583fb8ba1). This will also be explained in a further tutorial in the mission
- - You've created a technical communication user, for example with the credentials ID `TechUserAAKaaS`.
- - You've created a technical platform user as a space member in Cloud Foundry, for example with the credentials ID `CFPlatform`.
- - You've configured an ASP\_CC destination for cloud controller access in the 05 Provide subaccount in the global account for development based on the credentials of the technical Cloud Foundry platform user. See [Create a Destination for the Cloud Foundry Cloud Controller Access](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/35b5acbb32024aa6b90a22e9f957a9f6.html?locale=en-US&version=Cloud).
+- **IMPORTANT**: This tutorial cannot be completed on a trial account. If you want to explore some of the concepts of this mission on a trial account, using OData or SOAP rather than RFC, see the following workshop: [SAP BTP, ABAP Environment: Connectivity and Integration](https://github.com/SAP-samples/teched2020-DEV268).
+- You have set up SAP Business Technology Platform (BTP), ABAP Environment, for example by using the relevant booster: [Using a Booster to Automate the Setup of the ABAP Environment](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/cd7e7e6108c24b5384b7d218c74e80b9.html)
+- **Tutorial**: [Set Up SAP BTP, ABAP Environment and create Your First Console Application](abap-environment-trial-onboarding), for a licensed user, steps 1-2
+-	You have developer rights to an ABAP on-premise system, such as:
+    - [AS ABAP developer edition, latest version](https://blogs.sap.com/2019/07/01/as-abap-752-sp04-developer-edition-to-download/) or:
+    - [SAP S/4HANA 1809 fully activated appliance](https://blogs.sap.com/2018/12/12/sap-s4hana-fully-activated-appliance-create-your-sap-s4hana-1809-system-in-a-fraction-of-the-usual-setup-time/) or:
+    - [The SAP Gateway Demo System (ES5)](https://blogs.sap.com/2017/12/05/new-sap-gateway-demo-system-available/)
+-	In this on-premise system, you have installed SAP Cloud Connector with Administrator rights. (In the above systems, this is pre-installed)
 
 ## You will learn
-- Get an overview of SaaS enablement of an add-on product on SAP Business Technology Platform, ABAP Environment
-  - Understand the End-End process for building and deploying an add-on product on ABAP Environment and providing it as multitenant application
+  - How to open a secure tunnel connection between your SAP BTP, ABAP Environment and an on-premise SAP System, e.g. SAP S/4HANA
+  - How to create a destination service instance with an RFC connection
+  - How to test the connection using an ABAP handler class
 
 ## Intro
-This tutorial is intended to provide an overview of steps and provide a sneak-peek into the process. Detailed steps on how to achieve this will be covered in further tutorials of this mission
+Throughout this tutorial, replace `XXX` or `JP` with your initials or group number.
+
+**The problem:**
+
+There are two problems when setting up connectivity between the SAP BTP, ABAP Environment and an on-premise:
+
+- The ABAP Environment "lives" in the Internet, but customer on-premise systems are behind a firewall
+- Remote Function Call (RFC) is not internet-enabled
+
+**The solution:**
+
+- Set up a secure, tunnel connection from the on-premise system to the SAP BTP, ABAP Environment
+
+**Specifically:**
+
+1. The ABAP environment tenant fetches the destination from the Destination service instance.
+2. The ABAP environment tenant requests to open the tunnel connection through the Connectivity service.
+3. The Connectivity service tells the Cloud Connector to open the connection to this specific ABAP environment tenant using the admin connection.
+4. The Cloud Connector opens a tunnel connection to the ABAP environment tenant using its public tenant URL.
+5. After the tunnel is established, it can be used for actual data connection using the RFC or HTTP(S) protocols.
+
+
+[border;size:50px]![Image depicting overview-cf-only](overview-cf-only.png)
+
+<!-- border -->
+![Image depicting overview-cf-only](overview-cf-only.png)
+
+<img src="overview-cf-only.png" modifiers="border"/>
 
 ---
 
-### Learn about the global accounts and sub-accounts needed
+### Configure SAP Cloud Connector
 
+First, you need to connect your ABAP on-premise system to a Cloud Foundry subaccount by means of SAP Cloud Connector.
 
-The following figure shows the system landscape recommended for developing, operating and maintaining SaaS applications on SAP Business Technology Platform, ABAP Environment
+1. In your browser, log on to SAP Cloud Connector:
+    - Address = e.g. `https://localhost:<port>` (Default = 8443)
+    - User = Administrator
+    - Initial password = manage (You will change this when you first log in)
 
-![System Landscape](systemLandscape.png)
+2. Choose **Add Subaccount**:
 
+    |  Field Name     | Value
+    |  :------------- | :-------------
+    |  Region           | Your region. You can find this in SAP BTP cockpit (see screenshot below) - e.g. here, **Europe (Frankfurt) - AWS**
+    |  Subaccount           | Cloud Foundry Subaccount ID. You can find this by choosing your subaccount in SAP BTP cockpit and choosing the **information (i)** icon. (see screenshot below)
+    |  Display Name    | (Subaccount) Display Name. You can find this in by choosing your subaccount in SAP BTP cockpit (see screenshot below)
+    |  Subaccount User          |
+    |  Password   |
+    |  Location ID | Optional here. However, it is mandatory if you want to connect several Cloud Connectors to your subaccount. This can be any text, e.g. `XXX` for your initials or group number as here
 
-1. Global Account for Development    
+    <!-- border -->![step1a-cf-name-id-subac](step1a-cf-name-id-subac.png)
 
-	- 01 Develop - Holds the development system (DEV) used for continuous development and the correction system (COR) used to develop bug fixes and patches for already released versions of your add-on
-	- 02 Test - Contains a test system (TST) for testing the changes released from development and the quality assurance system (QAS) to test the bug fixes and patches for already released versions of your add-on  
-	- 03 Build/Assemble - Holds the system created for the add-on assembly. Software components are imported into this system, ATC checks executed, delivery packages for the add-on created
-	- 04 Build/Test - Holds the system created for add-on installation test performed after add-on build
-	- 05 Provide - Contains a production like system (AMT) to test multi-tenancy aspects of the SaaS solution (client separation, data isolation...)
-	- 06 Consume - Consumer sub-accounts for facilitating production like tests
+Your configuration should now look like this. Note down the **Location ID**, here **`XXX`**. You will need it later.
 
-	![Global Account For Development](GlobalAccountForDev.png)    
+  <!-- border -->![step1b-add-subaccount](step1b-add-subaccount.png)
+  <!-- border -->![step1c-cf-check-scc-xxx](step1c-cf-check-scc-xxx.png)
 
 
-2. Global Account for Production  
+### Add On-Premise System
 
-	- 05 Provide - Provider sub-account for production use - Contains various services for SaaS enablement, ABAP system (AMT) provisioned via ABAP Solution service
-	- 06 Consume - Consumer sub-accounts for production - Each of your customers is assigned a dedicated consumer sub-account
-	  
-	![GlobalAccountForProd](GlobalAccountForProd.png)
+1. In the menu in the left pane, expand the subaccount and choose **Cloud To On-Premise > Access Control**.
 
+    <!-- border -->![Image depicting step2a-cf-add-onP-system](step2a-cf-add-onP-system.png)
 
-### ABAP Development/UI Development
+2. In the **Mapping Virtual to Internal System** pane, choose **Add (+)**.
 
+    <!-- border -->
+   ![step2b-cf-add-onP-system](step2b-cf-add-onP-system.png)
 
-1. Create a software component with name "/NAMESPC/COMPONENT" in the development system DEV of your 01 Develop subaccount. See [Manage Software Components](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/3dcf76a072c9450eb46b99db947dab46.html?locale=en-US&version=Cloud). Implement your custom business services with the ABAP RESTful application programming model in this software component.
-2. Subscribe to the SAP Business Application Studio in the 01 Develop sub-account. See [Subscribing to SAP Business Application Studio](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/0a9b42e8795d4f7b8fc196a6fde0b3f2.html?locale=en-US&version=Cloud).
+3. Enter the following values, and choose **Save**.
 
-1. For more information on software components, see [Software Components](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/58480f43e0b64de782196922bc5f1ca0.html?locale=en-US&version=Cloud).
-2. For more information on the ABAP RESTful Application Programming Model, see [ABAP RESTful Application Programming Model](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/33a301e3fff5404e89f090910f7bd978.html?locale=en-US&version=Cloud).
-3. For more information on how to develop a user interface for the application and deploy it to a ABAP system, see [Develop an SAP Fiori Application UI and Deploy it to ABAP Using SAP Business Application Studio](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/eaaeba48e5e04949855f2763477cd557.html?locale=en-US&version=Cloud).
 
+    |  Field Name             | Value
+    |  :----------------------| :-------------
+    |  Backend Type           | **ABAP**
+    |  Protocol               | **`RFC`**
+    |                         | Without Load Balancing
+    |  Application Server     | **IP address of the on-premise server, e.g. of `NPL`**
+    | Instance Number         | **`00`**
+    |  Virtual Host           | e.g. **`nplhost`**. This represents an external hostname, so that you can hide the internal hostname from the outside world. **You will need this external hostname and port later, when creating a destination from SAP BTP cockpit**.
+    |  Virt. Inst. No.        | **`00`**
+    | Principal Type | None
+    |Description | Optional
+    | Check Internal Host | Ticked
 
+    <!-- border -->![step2c-cf-map-system](step2c-cf-map-system.png)
 
-### Test your application
+The mapping should now look something like this. Check that the status = `Reachable`. If not, check that you chose the correct port, or whether an internal firewall is preventing communication:
 
+![step2d-cf-mapped-to-virtual-system](step2d-cf-mapped-to-virtual-system.png)  
 
-Clone or Pull the changes in your software component "/NAMESPC/COMPONENT" into your TST system in the 02 Test sub-account and manually test your changes. See [How to clone software components](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/18564c54f529496ba420d4c83545a2ce.html?locale=en-US&version=Cloud).
-Run ABAP Test Cockpit checks in DEV and/or TST systems. See [ABAP Test Cockpit in the cloud](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/22c26ff27b9f44b7b7229a01e8e8ed25.html?version=Cloud) to understand what is already possible.  Information published on SAP site and ABAP Test Cockpit Configurator.
 
+### Specify remote function modules and BAPIs
 
-### Build a first version of your add-on
+Now, still in the **Cloud to On-Premise > Access Control** tab, enter the resource you need, `RFC_SYSTEM_INFO`.
 
+1. Add the resource **`RFC_SYSTEM_INFO`** by choosing the **Protocol = RFC**, then choosing **+**.
 
+    <!-- border -->![step3a-cf-add-rfc-resource](step3a-cf-add-rfc-resource.png)
 
-Once the application is developed and tested, the next step is to build a first version of your add-on using the [ABAP Environment pipeline](https://www.project-piper.io/pipelines/abapEnvironment/introduction/).
+2. Enter the name of the RFC, e.g. **`RFC_SYSTEM_INFO`**. Alternatively, add **`RFC`** as a **Prefix**. Then choose **Save**
 
-The result of a successful build is an add-on target vector that can be installed/updated in ABAP systems of the type `abap/saas-oem`
+    ![step3b-cf-name-rfc](step3b-cf-name-rfc.png)
 
-Use a CI/CD server such as Jenkins to perform the build. This is explained in a future tutorial of this mission. Steps at a glance.
+3. Add BAPIs to the list of resources by choosing **+** again. (You will need this BAPI in a later tutorial.)
 
-1. To capture the current state of your software component, create a branch in development system DEV of your 01 Develop subaccount. See [How to Work with Branches](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/6b2f0bfc14cb47ef888f01784c92e1bf.html?locale=en-US&version=Cloud).
->We recommend naming this first branch v1.0.0 and to create a new branch when updating the application with a support package (v1.1.0) or a new release (v2.0.0).
+4. Enter the name **`BAPI_EPM`** as a **Prefix**, then choose **Save**.
 
-2. Configure the Jenkins pipeline in your pipeline Git repository by creating/updating necessary files
+5. The list of resources should now look roughly like this.
 
-3. Trigger a build via the configured pipeline
+    ![step3c-cf-resources-rfc](step3c-cf-resources-rfc.png)
 
-4. Once the build is successful, publish your initial add-on version
-![AddOnBuildPipeline](AddOnBuildPipeline.png)
 
 
-### Implement Multitenant Application as MTA and deploy to Cloud Foundry
+### Check connectivity from SAP BTP cockpit
 
+In the SAP BTP cockpit of your Cloud Foundry subaccount, choose **Cloud Connectors**:
 
-Steps at a glance (detailed steps in further tutorials of this mission ):
+<!-- border -->![step4a-cf-cloud-connectors-in-sap-cloud-cockpit](step4a-cf-cloud-connectors-in-sap-cloud-cockpit.png)
 
-1. To prepare the creation of your multitenant application, navigate to your dev space in SAP Business Application Studio. Select "Start from Template" > Basic Multi-target Application.
+> The location ID points to the correct SAP Cloud Connector (located in the on-Premise system); The virtual host points to the on-Premise connection mapped in SAP Cloud Connector.
 
-2. [Update the created MTA descriptor and MTA extension descriptors with suitable configuration](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/ca0cc10a2d1249ebbde41f778d1932be.html?locale=en-US&version=Cloud)
 
-3. Develop and configure the [Approuter Application](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/44dbd0ae4d4b4d9c9c8371d711c22bfe.html?locale=en-US&version=Cloud)
 
-4. Build the MTA project and [deploy it to Cloud Foundry](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/faf51067caf348959dc9cb92a963af38.html)
+### Create destination
 
-![MultiTenantApplicaton](MultiTenantApplication.png)
+You will now create a destination in the ABAP Environment. This must be created at subaccount (not Space) level.
 
+1. In the SAP BTP cockpit of your Cloud Foundry subaccount, choose **Destinations**, then choose **New Destinations**.
 
-### Provide the SaaS solution to consumers
+    <!-- border -->![step4a-cf-cockpit-new-destination](step4a-cf-cockpit-new-destination.png)
 
+2. Enter the following values:
 
-For a consumer to be able to access the SaaS solution after subscription, a consumer-specific route pointing to the approuter application needs to be created. See [Create Routes](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/9fddeea396b34b528bc8d286f3d5d9cf.html?locale=en-US&version=Cloud).
+    |  Field Name     | Value
+    |  :------------- | :-------------
+    |  Name           | e.g. **`NPL_JP`** as here
+    |  Type           | **`RFC`**
+    |  Description    | Can be anything, here **`NPL`**
+    |  Location ID    | same as in step 1, e.g. **`XXX`**
+    |  User   | Your user for the on-premise system, e.g. DEVELOPER
+    |  Password | Your password
 
-This route needs to match the property TENANT\_HOST\_PATTERN defined in the "mta.yaml" file.
+3. Add the following additional properties and values, by choosing **New Property**:
 
-1. Create a new route in the space of multitenant application in the 05 Provide subaccount
-2. Assign the route to the deployed approuter application.
-3. To enable consumer access, subscribe to the solution from the 06 consume subaccount
-4. To enable creation of initial administrator user in the consumer tenant, assign the role collection <app\_name>-admin with the role `SolutionAdmin` to your user
-5. Open the application URL provided by the subscription with the user you wish to onboard as initial administrator user. This is the same user that was assigned to the <app\_name>-admin role collection.
-After triggering initial user onboarding, you are redirected to the SAP Fiori launchpad of the SaaS solution.
 
-![ConsumerSubaccount](ConsumerSubAccount.png)
+    |  Field Name         | Value
+    |  :-------------     | :-------------
+    |  `jco.client.ashost`| Virtual hostname of your on-premise ABAP System, defined in SAP Cloud Connector, e.g. **`<nplhost>`**
+    |  `jco.client.client`| `<Your ABAP System client`, e.g. **001**
+    | `jco.client.sysnr`  | `<Your ABAP System number>`, e.g. **00**
 
+    <!-- border -->![step5b-cf-destination-created](step5b-cf-destination-created.png)
+      .
+    <!-- border -->![step4b-cf-connection-successful](step4b-cf-connection-successful.png)
 
-### Maintain the SaaS solution
 
+### Create ABAP class for RFC connection in SAP BTP, ABAP Environment
 
-The Landscape Portal acts as a central tool to allow service providers to perform lifecycle management operations
+1. In ABAP Development Tools (ADT), in **Project Explorer**, open your ABAP Environment instance.
+For more information, see [Set Up SAP BTP, ABAP Environment and create Your First Console Application](abap-environment-trial-onboarding).
 
-- Install namespaces in various ABAP systems of your Landscape using the [Maintain Namespaces application](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/5456007ac4d04cb98b52b41f8c2d4a71.html?locale=en-US&version=Cloud) of the landscape portal
+2. In the project, create a new ABAP package.
 
-- The [Register Systems for Pre-Upgrade app](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/100be99ac7064dfca43f0a0750d90d5b.html?locale=en-US&version=Cloud) allows you to select specific test or development systems for an early upgrade: These systems will be upgraded two weeks before the official roll-out, giving you ample time to test your solution prior to the actual upgrade.
+3. Create a new ABAP class: Choose **File > New > Other... > ABAP Class**.
 
-- The [Register Product app](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/dc15fb4ebab5453fa4641b98190b1f85.html?locale=en-US&version=Cloud) provides information about which global accounts are already registered for an available product and enables you, as a provider, to create new products and register your global accounts for installation of existing products.
+3. Enter a name and description. The name should be in the form `ZCL_...RFC_XXX`. Replace `XXX` with your group number or initials.
 
-- The [Check Product Version app](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/0da158a663c2431099e9ea1b3cec6e9a.html?locale=en-US&version=Cloud) lets you view the results of product version delivery infrastructure checks to see if your product version is ready for delivery. The app shows results for checks of the product version, its components and respective packages.
+4. Create or assign a transport request.
 
-- As a provider, you can use the [Update Product Version app](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/32c4f7d3f0224fc2be3a1103297db59f.html?locale=en-US&version=Cloud) to update the version of your product on specific systems.
 
-- The [Operations Dashboard](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/0a3a7359c24341b5bac61652b4858bff.html?locale=en-US&version=Cloud) gives an overview of all processes that have been triggered in the Landscape Portal to help you monitor your operations.
+### Add interfaces statement; implement main method
 
-- The [systems overview app](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/99c975e077bc447f9049056256a7e46c.html?locale=en-US&version=Cloud) provides an overview of all the systems and tenants in the global account where Landscape Portal is being accessed. The app can also be used to [create support users](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/b31712cc9dbf44fb8a603ab4be6f8d28.html?locale=en-US&version=Cloud) for access to consumer tenants for troubleshooting bugs/issues faced by the consumer
+1. Implement the interface by adding this statement to the public section:
 
+    `interfaces if_oo_adt_classrun.`
 
-### Set up maintenance system landscape
+    This allows you to test your class by displaying the output in the ABAP Console.
 
+2. In the implementation section, add the METHOD and ENDMETHOD statements:
 
-Maintaining a solution involves development of bug fixes.  Bug fixes are not implemented as part of the development code line (systems DEV and TST) but in a separate correction code line with separate systems to develop and test these corrections.
+    `METHOD IF_OO_ADT_CLASSRUN~MAIN.`
+    `ENDMETHOD.`
 
-![MaintenanceSysLandscape](MaintenanceSysLandscape.png)
 
-The ABAP systems that you use for development, testing, and add-on assembly are of type ABAP/standard and made available via entitlements. As a SaaS solution operator, you have to assign service entitlements to different subaccounts according to the following structure:
+### Create variables
 
-| Global Account| Sub-Account | Space | Entitlement | ABAP Systems|
-|---------------|-------------|-------|-------------|-------------|
-| Global Account for Development | 01 Develop| Develop | 1x ABAP/standard | COR|
-|                                 |      |    | `ABAP/hana_compute_unit (standard: 2)`|
-|                                 |      |    | `ABAP/abap_compute_unit (standard: 1)` |
-|                                  |02 Test| Test| 1x ABAP/standard| QAS |
-|                                  |             |         |`ABAP/hana_compute_unit (standard: 2)`   |
-|                                  |             |         |`ABAP/abap_compute_unit (standard: 1)` |                             
+Create the data types that specify your remote connection information, replacing the `i_name` with your the name of the specific **RFC** destination, which you created in SAP BTP cockpit (in step 5 of this tutorial).
 
+    ```ABAP
+    DATA(lo_destination) = cl_rfc_destination_provider=>CREATE_BY_CLOUD_DESTINATION(
+                            i_name                  = 'NPL_JP'
 
+                           ).
 
+    DATA(lv_destination) = lo_destination->get_destination_name( ).
 
-The service parameter `is_development_allowed` is used to differentiate between development and test systems.
+    DATA lv_result type c length 200.
 
->For development in the ABAP correction system COR, you, as a SaaS solution operator, create a system in subaccount 01 Develop in the development space. For correction system COR, set parameter `is_development_allowed = true`.
+    ```
 
->For testing in the ABAP quality assurance system QAS, you, as a SaaS solution operator, create a system in subaccount 02 Test in the test space. For quality assurance system QAS, set parameter `is_development_allowed = false`.
 
-Users in the ABAP correction system COR might be locked and need to be unlocked for development of corrections.
+### Call remote function from on-premise system
 
-For more information around versioning and branches, refer the [help documentation](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/9482e7eef4634cb993a4ae296b2029fa.html#versioning-and-branches)
+```ABAP
+CALL function 'RFC_SYSTEM_INFO'
+destination lv_destination
+  IMPORTING
+    RFCSI_EXPORT      = lv_result.
 
-For more information around add-on package types, refer the [help documentation](https://help.sap.com/docs/BTP/65de2977205c403bbc107264b8eccf4b/9482e7eef4634cb993a4ae296b2029fa.html#loio398be26971414fbb91cbe3b0a3cb8a26)
+```
 
 
-### Test Yourself
+### Output result
+
+Output the result of the RFC call to the ABAP Console
+
+```ABAP
+out->write( lv_result ).
+```
+
+
+### Wrap method in an exception
+
+Wrap the whole method in an exception using TRY...CATCH.
+
+```ABAP
+catch cx_root into data(lx_root).
+  out->write( lx_root->get_text( ) ).
+endtry.
+```    
+![Image depicting step15-try-catch](step15-try-catch.png)
+
+
+### Check your code
+
+Your code should look roughly like this:
+
+```ABAP
+CLASS ZCL_A4C_RFC_XXX DEFINITION
+  public
+  final
+  create public .
+
+public section.
+  interfaces if_oo_adt_classrun.
+protected section.
+private section.
+ENDCLASS.
+
+CLASS ZCL_A4C_RFC_XXX IMPLEMENTATION.
+  METHOD IF_OO_ADT_CLASSRUN~MAIN.
+    TRY.
+      DATA(lo_destination) = cl_rfc_destination_provider=>CREATE_BY_CLOUD_DESTINATION(
+                              i_name                  = 'NPL_JP'
+                             ).
+
+      DATA(lv_destination) = lo_destination->get_destination_name( ).
+
+      DATA lv_result type c length 200.
+
+      CALL function 'RFC_SYSTEM_INFO'
+      destination lv_destination
+        IMPORTING
+          RFCSI_EXPORT      = lv_result.
+
+        out->write( lv_result ).
+    catch cx_root into data(lx_root).
+      out->write( lx_root->get_text( ) ).
+    endtry.
+  ENDMETHOD.
+
+ENDCLASS.
+```
+
+
+### Test the class
+
+1. Save and activate the class, using **`Ctrl+S, Ctrl+F3`**.
+
+2. Run the class by choosing **`F9`**. Some system information, such as the hostname, the System ID ( `<SID>` ), and the IP address should be displayed.
+
+
+### Test yourself
+
+
+
+
+### Add error handling to the class for the RFC connection 
+
+1. Go back to your RFC class. Remove the period (.) after the IMPORTING parameter and add the following exception parameters to the function call `RFC_SYSTEM_INFO`:
+
+    ```ABAP
+
+    EXCEPTIONS
+      system_failure        = 1 MESSAGE msg
+      communication_failure = 2 MESSAGE msg
+      OTHERS                = 3.
+
+    ```
+
+2. Now evaluate `sy-subrc` by adding the following CASE...ENDCASE statement:
+
+    ```ABAP
+
+    CASE sy-subrc.
+       WHEN 0.
+         out->write( lv_result ).
+       WHEN 1.
+         out->write( |EXCEPTION SYSTEM_FAILURE | && msg ).
+       WHEN 2.
+         out->write( |EXCEPTION COMMUNICATION_FAILURE | && msg ).
+       WHEN 3.
+         out->write( |EXCEPTION OTHERS| ).
+     ENDCASE.
+
+    ```
+
+    ![Image depicting step20-error-handling](step20-error-handling.png)
+
+
+## More Information
+This tutorial mission is based on a blog post series by Andre Fischer, which is well worth a look:
+
+- [How to call a remote function module in your on-premise SAP system from SAP BTP ABAP Environment](https://blogs.sap.com/2019/02/28/how-to-call-a-remote-function-module-in-your-on-premise-sap-system-from-sap-cloud-platform-abap-environment/)
+
+For more information on OData services and SAP Gateway in general, see:
+- [OData service development with SAP Gateway using CDS](https://blogs.sap.com/2016/06/01/odata-service-development-with-sap-gateway-using-cds-via-referenced-data-sources/) - pertains to on-premise Systems, but contains lots of useful background information on the relationships between CDS views and OData services
+
+- [OData – Everything that you need to know](https://blogs.sap.com/2016/02/08/odata-everything-that-you-need-to-know-part-1/) - especially Parts 1-3 (Community content)
+
+For more information on connectivity in this context, see:
+- SAP Help Portal: [SAP Cloud Connector](https://help.sap.com/viewer/368c481cd6954bdfa5d0435479fd4eaf/Cloud/en-US/642e87f1492146998a8eb0779cd07289.html)
+
+- SAP Help Portal: [Setting Up Destinations to Enable On-Premise Connectivity](https://help.sap.com/viewer/DRAFT/65de2977205c403bbc107264b8eccf4b/Dev/en-US/9b6510edf4d844a28f022b3db41f3202.html)
+
+- SAP Help Portal: [Set Up an RFC Destination](https://help.sap.com/viewer/DRAFT/60f1b283f0fd4d0aa7b3f8cea4d73d1d/Internal/en-US/a69e99c457a54ff881adcff843eea950.html)
+
+For more information on SAP Business Technology Platform (BTP)
+- SAP Help Portal: [What is SAP Business Technology Platform (BTP)](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/73beb06e127f4e47b849aa95344aabe1.html)
+
+- SAP Help Portal: [Getting Started With a Customer Account](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/e34a329acc804c0e874496548183682f.html) - If you use the booster, these steps are performed automatically for you, but you may be interested in the background information
+
+
+
 
 
 
