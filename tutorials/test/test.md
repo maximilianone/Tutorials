@@ -8,7 +8,7 @@ time: 35
 ---
 
 ## Prerequisites
-- [Create an ABAP project in Eclipse](abap-create-project)
+- [Create an ABAP project in Eclipse](abap-create-project) test
 - The ABAP MQTT Client is available on **ABAP Platform 1809(v2)** and above.
 - You are using **ABAP Development Tools**.
 
