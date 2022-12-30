@@ -3,6 +3,8 @@ auto_validation: true
 time: 20
 tags: [ tutorial>beginner, software-product>sap-hana-cloud, software-product>sap-adaptive-server-enterprise, software-product>meter-operation-service-billing ]
 primary_tag: software-product>sap-hana-cloud
+author_name: Michal Keidar
+author_profile: https://github.com/maximilianone
 parser: v2
 ---
 
