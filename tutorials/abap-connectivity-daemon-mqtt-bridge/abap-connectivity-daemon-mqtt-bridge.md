@@ -8,7 +8,7 @@ author_profile: https://github.com/maximilianone
 parser: v2
 ---
 
-# Migrate SAP ASE Database from On-Premise to SAP HANA Cloud
+# Migrate SAP ASE Database from On-Premise to SAP HANA Cloud Test
 
 <!-- description --> Migrate SAP ASE Database from On-Premise to SAP HANA Cloud
 
