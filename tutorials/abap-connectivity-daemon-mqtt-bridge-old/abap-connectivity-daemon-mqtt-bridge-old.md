@@ -1,5 +1,5 @@
 ---
-title: Tut 1 Forward MQTT and AMC Messages Using an ABAP Daemon
+title: Tut 1 Forward MQTT and AMC Messages Using an ABAP 
 description: Forward MQTT and AMC Messages using an ABAP Daemon.
 auto_validation: true
 primary_tag: programming-tool>abap-development
